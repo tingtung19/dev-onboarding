@@ -1,0 +1,58 @@
+// File: _mixins.scss
+// This file contains mixins.
+
+// https://gist.github.com/anschaef/09c5426ce1619b381b9c4297a6fc0914
+// Always remember that you can use Bootstrap's mixins on development like media-breakpoint, make-containers, make-row, make-col, etc.
+
+/*--------------------------------------------------------------
+# Example mixin title
+--------------------------------------------------------------*/
+// Code here
+@mixin cutByLine($line) {
+	display: -webkit-box;
+	-webkit-line-clamp: $line;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+@mixin placeholder($prop, $value) {
+	&::-webkit-input-placeholder {
+		/* Edge */
+		#{$prop}: $value;
+	}
+
+	&:-ms-input-placeholder {
+		/* Internet Explorer */
+		#{$prop}: $value;
+	}
+
+	&::placeholder {
+		#{$prop}: $value;
+	}
+}
+
+@mixin screenUp($breakpoint) {
+	@media screen and (min-width: ($breakpoint + 1)) {
+		@content;
+	}
+}
+@mixin screenDown($breakpoint) {
+	@media screen and (max-width: ($breakpoint + 1)) {
+		@content;
+	}
+}
+@mixin screenBetween($min, $max) {
+	@media screen and (min-width: $min) and (max-width: $max) {
+		@content;
+	}
+}
+
+@mixin responsive($prop, $lg: 0, $md: $lg, $sm: $md) {
+	#{$prop}: $lg;
+	@media (max-width: $tablet) {
+		#{$prop}: $md;
+	}
+	@media (max-width: $mobile) {
+		#{$prop}: $sm;
+	}
+}
