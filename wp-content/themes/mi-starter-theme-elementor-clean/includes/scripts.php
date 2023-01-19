@@ -9,8 +9,8 @@ class Script
 	public function __construct()
 	{
 		add_action("wp_enqueue_scripts", [$this, "frontEnd"]);
-		add_action( "init",[$this, "show_text"]  );
-		add_filter( 'the_title', 'wporg_filter_title' );
+		// add_action( "init",[$this, "show_text"]  );
+		echo add_filter( 'init', [$this, 'wporg_filter_title']  );
 	}
 	
 	function wporg_filter_title( $title ) {

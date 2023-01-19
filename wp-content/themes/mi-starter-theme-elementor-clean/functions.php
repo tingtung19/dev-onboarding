@@ -252,3 +252,41 @@ if (!function_exists("hello_elementor_body_open")) {
  * Initiate Custom Functions : CustomFunction()
  */
 require_once __DIR__ . '/custom-functions.php';
+
+function add_new_menu_items () {
+	add_menu_page(
+		"Employees",
+		"Employees Page",
+		"manage_options",
+		"employees-menu",
+		"employees_page",
+		100
+	);
+	add_submenu_page(
+		'employees-menu',
+		'permanent-employees',
+		'Permanent Employees',
+		'manage_options',
+		'permanent-employees-menu',
+		'permanent_employees_page'
+	);
+	add_submenu_page(
+		'employees-menu',
+		'contract-employees',
+		'Contract Employees',
+		'manage_options',
+		'contract-employees-menu',
+		'contract_employees_page'
+	);
+
+	add_submenu_page(
+		'employees-menu',
+		'intern-employees',
+		'Intern Employees',
+		'manage_options',
+		'intern-employees-menu',
+		'intern_employees_page'
+	);
+}
+
+add_action( 'admin_menu', 'add_new_menu_items');
