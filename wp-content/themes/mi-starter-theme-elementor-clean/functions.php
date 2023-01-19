@@ -260,6 +260,7 @@ function add_new_menu_items () {
 		"manage_options",
 		"employees-menu",
 		"employees_page",
+		"dashicons-admin-users",
 		100
 	);
 	add_submenu_page(
@@ -289,4 +290,46 @@ function add_new_menu_items () {
 	);
 }
 
+function employees_page() {
+	?>
+		<h1>
+			Custom Page <br> Halo
+			<?php esc_html_e( 'Welcome to Employees Page (Custom).', 'my-plugin-textdomain' ); ?>
+		</h1>
+		<form>
+			<table style="border-bord">
+				<tr>
+					<td>Nama</td>
+				</tr>
+			</table>
+		</form>
+	<?php
+}
+
 add_action( 'admin_menu', 'add_new_menu_items');
+
+// adding metabox into custom page
+
+function save_editor( $post_id){
+	if (isset($_POST['wpc_post_editor'])) {
+		$editor_id = sanitize_text_field($_POST['wpc_post_editor']);
+		update_post_meta($post_id, 'wpc_post_editor', $editor_id);
+	}
+}
+
+function create_meta_box(){
+	add_meta_box('wpc_editor','Post Editor', 'meta_box_html','admin');
+
+}
+
+function meta_box_html(){
+	echo '<input type="text" name="wpc_post_editor" id="post_editor" placeholder="Type the post editor"';
+	echo 'value="'.get_post_meta(get_the_ID(), "wpc_post_editor", true).'"';
+	echo '>';
+}
+
+add_action('my-plugin-textdomain', 'create_meta_box');
+		// if (isset($_POST['publish'])) {
+		// 	add_action('save_post', [$this, 'save_editor']);
+		// }
+
