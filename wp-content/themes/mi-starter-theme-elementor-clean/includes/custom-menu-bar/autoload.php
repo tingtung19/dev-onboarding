@@ -6,4 +6,4 @@
  */
 
 defined( 'ABSPATH' ) || die( "Can't access directly" );
-// require_once __DIR__ . '/custom-menu-bar.php';
+require_once __DIR__ . '/custom-menu-bar.php';

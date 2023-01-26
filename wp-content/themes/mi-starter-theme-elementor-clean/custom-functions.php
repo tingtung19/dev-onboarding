@@ -19,6 +19,7 @@ class CustomFunction
 	public function hook()
 	{
 		add_filter("upload_mimes", [$this, "addFileTypesToUploads"]); // ini harus dipindah
+		
 	}
 
 	/**
@@ -89,6 +90,10 @@ class CustomFunction
 			]
 		);
 	}
+
+	
+
+	
 }
 
 

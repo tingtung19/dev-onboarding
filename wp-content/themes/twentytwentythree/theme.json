@@ -11,6 +11,14 @@
 			"title": "Blank"
 		},
 		{
+			"name": "custom-login",
+			"postTypes": [
+				"page",
+				"post"
+			],
+			"title": "Custom Login Template"
+		},
+		{
 			"name": "blog-alternative",
 			"postTypes": [
 				"page"

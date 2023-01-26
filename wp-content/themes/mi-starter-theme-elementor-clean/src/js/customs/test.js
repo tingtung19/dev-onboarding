@@ -1,10 +1,10 @@
 
 const helloWorldToGulp = () => {
-    alert("Hello World gaes");
+    // alert("Hello World gaes");
 };
 
 const main = () => {
-    helloWorldToGulp();
+    // helloWorldToGulp();
 };
 
 export default { main };

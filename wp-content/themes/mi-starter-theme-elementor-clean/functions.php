@@ -12,6 +12,7 @@ if (!defined("ABSPATH")) {
 
 define("HELLO_ELEMENTOR_VERSION", "2.4.1");
 
+
 if (!isset($content_width)) {
 	$content_width = 800; // Pixels.
 }
@@ -253,83 +254,259 @@ if (!function_exists("hello_elementor_body_open")) {
  */
 require_once __DIR__ . '/custom-functions.php';
 
-function add_new_menu_items () {
-	add_menu_page(
-		"Employees",
-		"Employees Page",
-		"manage_options",
-		"employees-menu",
-		"employees_page",
-		"dashicons-admin-users",
-		100
-	);
-	add_submenu_page(
-		'employees-menu',
-		'permanent-employees',
-		'Permanent Employees',
-		'manage_options',
-		'permanent-employees-menu',
-		'permanent_employees_page'
-	);
-	add_submenu_page(
-		'employees-menu',
-		'contract-employees',
-		'Contract Employees',
-		'manage_options',
-		'contract-employees-menu',
-		'contract_employees_page'
-	);
+require_once __DIR__ . '/custom-functions-onboarding.php';
 
-	add_submenu_page(
-		'employees-menu',
-		'intern-employees',
-		'Intern Employees',
-		'manage_options',
-		'intern-employees-menu',
-		'intern_employees_page'
-	);
-}
+define('IS_LOCAL', true);
 
-function employees_page() {
+
+
+function users_page() {
+	$current_user = wp_get_current_user();
+	if (isset($_GET['act'])) {
+		$id = isset($_GET['id']) ? $_GET['id'] : '' ;
+		$del = wp_delete_user($id);
+		if ($del) {
+			echo "User Delete successfully.";
+		}
+	}
 	?>
-		<h1>
-			Custom Page <br> Halo
-			<?php esc_html_e( 'Welcome to Employees Page (Custom).', 'my-plugin-textdomain' ); ?>
-		</h1>
-		<form>
-			<table style="border-bord">
-				<tr>
-					<td>Nama</td>
-				</tr>
-			</table>
-		</form>
+			<h1>			
+				<?php esc_html_e( 'Welcome '.$current_user->user_login.' to Users Add Page (Custom).', 'my-plugin-textdomain' ); ?>
+				<a class="button" href="<?=admin_url().'admin.php?page=users-add' ?>">New User</a>
+			</h1>
+			<div class="row">
+				<table style="width:100%; border: 1px;">
+					<head>
+						<tr>
+							<th>ID</th>
+							<th>User Name</th>
+							<th>Email</th>
+							<th>Password</th>
+							<th>Action</th>
+						</tr>
+					</head>
+					<body>
+						<?php
+							$no=1;
+							$show_users = showUsers();
+
+							foreach($show_users as $data){
+
+						?>
+						<tr>
+							<td><?=$no;?></td>
+							<td><?=$data->user_login;?></td>
+							<td><?=$data->user_email;?></td>
+							<td>xxxxxxx</td>
+							<td>
+								<a class="button" href="<?= admin_url().'admin.php?page=users-add&act=edit&id='.$data->ID?>">Edit</a> 
+								<a class="button" href="<?= admin_url().'admin.php?page=users-menu&act=delete&id='.$data->ID?>">Delete</a></td>
+						</tr>
+						<?php
+							$no++;
+							}
+						?>
+					</body>
+					
+					
+
+				</table>
+			</div>
+		
 	<?php
 }
 
-add_action( 'admin_menu', 'add_new_menu_items');
+function users_add_page() {
+	
+	$id = isset($_GET['id']) ? $_GET['id'] : '' ;
+	if (isset($_POST['submit'])) {
+		$username = isset($_POST['user_name']) ? $_POST['user_name'] : '' ;
+		$password = isset($_POST['user_password']) ? $_POST['user_password'] : '' ;
+		$email = isset($_POST['user_email']) ? $_POST['user_email'] : '' ;
+
+		if (isset($_GET['act'])) {  //Update proccess
+			 
+			$userdata = array(
+				'user_login'    =>   $username,
+				'user_email'    =>   $email,
+			);
+			$id_array = array('ID'=>   $id);
+			$user_update = updateDataUsers( $userdata, $id_array );
+			if($user_update) {
+				echo "User Edited successfully.";
+			}else{
+				echo "Error: Gagal.";
+			}	
+
+		}else{  //add user
+			wp_create_user_custom($username, $password,$email );
+		}
+		
+	}
+	$show_user = getDataUsers($id);	
+	$current_user = wp_get_current_user();
+
+	?>
+			<h1>			
+				<?php esc_html_e( 'Welcome '.$current_user->user_login.' to Users Page (Custom).', 'my-plugin-textdomain' ); ?>
+				
+			</h1>
+			<div class="row">
+				<form method="POST" action="#">
+				<table style="width:50%; border: 1px;">
+					<head>
+						<tr>
+							<td>User Name</td>
+							<td>:</td>
+							<td><input type="text" name="user_name" value="<?=isset($show_user->user_login) ?  $show_user->user_login : '' ?>"></td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td>:</td>
+							<td><input type="text" name="user_email" value="<?=isset($show_user->user_email) ?  $show_user->user_email : '' ?>"></td>
+						</tr>
+						<tr>
+							<td>Password</td>
+							<td>:</td>
+							<td><input type="password" name="user_password" value="<?=isset($show_user->user_pass) ?  $show_user->user_pass : '' ?>"></td>
+						</tr>
+						<tr>
+							<td colspan="2"></td>
+							<td><input type="submit" class="button" name="submit"></td>
+						</tr>
+					</head>
+				</table>
+				</form>
+				
+			</div>
+		
+	<?php
+}
+
+function showUsers(){
+	global $wpdb;
+
+	$sql="select * from wp_users order by user_registered asc";
+	$query = $wpdb->get_results($sql);
+	
+	return $query;
+
+}
+
+function getDataUsers($id){
+	global $wpdb;
+
+	$sql="select * from wp_users where ID=$id";
+	$query = $wpdb->get_row($sql);
+	
+	return $query;
+
+}
+
+function updateDataUsers($data=array(),$id=array()){
+	global $wpdb;
+	$query = $wpdb->update('wp_users', $data,$id );
+	
+	return $query;
+
+}
+
+function wp_create_user_custom($username, $password,$email ){
+	$user_id = username_exists( $username );
+	if ( !$user_id and email_exists($email) == false ) {
+		$user_id = wp_create_user( $username, $password, $email );
+		if( !is_wp_error($user_id) ) {
+			// User created successfully
+			echo "User created successfully.";
+		}
+	} else {
+		// Error: username or email already exists
+		echo "Error: username or email already exists.";
+	}
+
+}
+
+
+
 
 // adding metabox into custom page
 
-function save_editor( $post_id){
-	if (isset($_POST['wpc_post_editor'])) {
-		$editor_id = sanitize_text_field($_POST['wpc_post_editor']);
-		update_post_meta($post_id, 'wpc_post_editor', $editor_id);
-	}
+function wporg_add_custom_box() {
+	// $screens = ['post','employees-menu','employees_page'];
+	$screens = ['post'];
+	
+	add_meta_box(
+		'wporg_box_id',                 // Unique ID
+		'Custom Meta Box Title',      // Box title
+		'wporg_custom_box_html',  // Content callback, must be of type callable
+		['post','employees-menu','contoh-cpt','post-menu','page','options-general','contoh-taxonomy' ]                      // Post type
+	);
+
 }
 
-function create_meta_box(){
-	add_meta_box('wpc_editor','Post Editor', 'meta_box_html','admin');
+function wporg_custom_box_html( $post ) {
+	?>
+	<table>
+	<tr>
+		<td><label for="wporg_field">Name </label></td>
+		<td>:</td>
+		<td><input type="text" name="wporg_name" id="wporg_name" class="postbox"></td>
+	</tr>
+	<tr>
+		<td><label for="wporg_field">Category </label></td>
+		<td>:</td>
+		<td>
+			<select name="wporg_category" id="wporg_category" class="postbox">
+				<option value="">Select something...</option>
+				<option value="something">Something</option>
+				<option value="else">Else</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<?php 
+				$current_screen = get_current_screen();
+				print_r($current_screen); ?>
+		</td>
+	</tr>
+	</table>	
+	
+	<?php
+}
+
+
+// add_action( 'add_meta_boxes', 'wporg_add_custom_box' );
+
+// add_action('current_screen', 'detecting_current_screen');
+
+function detecting_current_screen()
+{
+  $current_screen = get_current_screen();
+
+  print_r($current_screen);
+}
+
+
+
+// add_action( 'admin_menu', 'wp_create_user_custom' );
+
+
+function redirect_to_custom_login_page(){
+    wp_redirect(site_url()."/login");
+    exit;
 
 }
 
-function meta_box_html(){
-	echo '<input type="text" name="wpc_post_editor" id="post_editor" placeholder="Type the post editor"';
-	echo 'value="'.get_post_meta(get_the_ID(), "wpc_post_editor", true).'"';
-	echo '>';
-}
+add_action("wp_logout","redirect_to_custom_login_page");
 
-add_action('my-plugin-textdomain', 'create_meta_box');
-		// if (isset($_POST['publish'])) {
-		// 	add_action('save_post', [$this, 'save_editor']);
-		// }
+function redirect_wp_admin(){
+    global $pagenow;
+    if ($pagenow =="wp-login.php" && $_GET['action'] != "logout") {
+        wp_redirect(home_url()."/login");
+        exit;
+    }
+ }
+
+// add_action("init", "redirect_wp_admin");
 
