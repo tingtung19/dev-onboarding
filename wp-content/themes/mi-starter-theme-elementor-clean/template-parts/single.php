@@ -17,6 +17,7 @@ while ( have_posts() ) :
 	?>
 
 <main <?php post_class( 'site-main' ); ?> role="main">
+
 	<?php if ( apply_filters( 'hello_elementor_page_title', true ) ) : ?>
 		<header class="page-header">
 			<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
@@ -43,7 +44,7 @@ while ( have_posts() ) :
 		?>
 		<ul>
 		<?php
-		if( get_field('detail') ):
+		if( get_field('detail') ): //from acf repeater
 			while( the_repeater_field('detail') ): ?>
 				<li><Address>Author : <?php the_sub_field('author'); ?></Address></li>
 				<li><Address>Publisher : <?php the_sub_field('publisher'); ?></Address></li>

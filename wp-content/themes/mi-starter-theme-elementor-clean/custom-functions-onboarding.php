@@ -11,6 +11,7 @@ class CustomFunctionOnboarding
 	public function __construct()
 	{
 		$this->hook();
+		$this->add_acf_option_page();
 	}
 
 	/**
@@ -44,6 +45,35 @@ class CustomFunctionOnboarding
 		// return home_url();
 		return "https://madeindonesia.com";
 	}
+
+	function add_acf_option_page(){
+		if( function_exists('acf_add_options_page') ) {
+    
+			acf_add_options_page(array(
+				'page_title'    => 'Website Settings',
+				'menu_title'    => 'Website Settings',
+				'menu_slug'     => 'website-general-settings',
+				'capability'    => 'edit_posts',
+				'redirect'      => false
+			));
+			
+			acf_add_options_sub_page(array(
+				'page_title'    => 'Website Header Settings',
+				'menu_title'    => 'Header',
+				'parent_slug'   => 'website-general-settings',
+			));
+			
+			acf_add_options_sub_page(array(
+				'page_title'    => 'Website Footer Settings',
+				'menu_title'    => 'Footer',
+				'parent_slug'   => 'website-general-settings',
+			));
+
+						
+		}
+	}
+
+	
 	
 
 	
