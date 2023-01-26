@@ -425,10 +425,6 @@ function wp_create_user_custom($username, $password,$email ){
 	}
 
 }
-
-
-
-
 // adding metabox into custom page
 
 function wporg_add_custom_box() {
@@ -509,4 +505,6 @@ function redirect_wp_admin(){
  }
 
 // add_action("init", "redirect_wp_admin");
+
+
 
