@@ -274,6 +274,9 @@ function users_page() {
 				<?php esc_html_e( 'Welcome '.$current_user->user_login.' to Users Add Page (Custom).', 'my-plugin-textdomain' ); ?>
 				<a class="button" href="<?=admin_url().'admin.php?page=users-add' ?>">New User</a>
 			</h1>
+			<label>Search</label><input type="text" id="search_name" class="search_name"><button id="btnSearch">Seacrh</button>			
+			<span class="spinner" style="float:none;"></span>
+			
 			<div class="row">
 				<table style="width:100%; border: 1px;">
 					<head>
@@ -407,7 +410,7 @@ function updateDataUsers($data=array(),$id=array()){
 	global $wpdb;
 	$query = $wpdb->update('wp_users', $data,$id );
 	
-	return $query;
+	return $query; 
 
 }
 
@@ -483,10 +486,7 @@ function detecting_current_screen()
   print_r($current_screen);
 }
 
-
-
 // add_action( 'admin_menu', 'wp_create_user_custom' );
-
 
 function redirect_to_custom_login_page(){
     wp_redirect(site_url()."/login");
@@ -505,6 +505,23 @@ function redirect_wp_admin(){
  }
 
 // add_action("init", "redirect_wp_admin");
+
+
+// Fungsi halaman
+function wp_testing_admin_ajax_content() {
+	global $hook_suffix;
+?>
+
+	<div class="wrap">
+		<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+		<hr>
+		<p><strong>Hook Suffix:</strong> : <?php echo $hook_suffix; ?></p>
+		<p>Ketika tombol di klik, maka akan melakukan request AJAX untuk mendapatkan info email administrator website.</p>
+		<button id="info-email" class="button">Info Email Admin Website</button>
+		<span class="spinner" style="float:none;"></span>
+	</div>
+
+<?php }
 
 
 
