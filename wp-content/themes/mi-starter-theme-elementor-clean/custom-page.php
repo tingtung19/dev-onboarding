@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <?php
-
+get_header();
 
 while ( have_posts() ) :
 	the_post();
@@ -62,6 +62,26 @@ while ( have_posts() ) :
 		
 		</ul>
 		<hr>	
+
+		<table>
+			<thead>
+				<tr>
+					<td>Name</td>
+					<td>Phone Number / WA</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody id="datasession">
+			</tbody>
+			<tfoot>
+				<tr>
+					<td><input type="text" id="name" class="name"></td>
+					<td><input type="text" id="phone" clas="phone"></td>
+					<td><button id="btnaddInterested" class="btnaddInterested">Add Interested</button></td>
+				</tr>
+				
+			</tfoot>
+		</table>
 		
 		<?php wp_link_pages(); ?>
 	</div>
@@ -85,3 +105,4 @@ while ( have_posts() ) :
 
 	<?php
 endwhile;
+get_footer();

@@ -1,10 +1,10 @@
 
-const helloWorldToGulp = () => {
-    // alert("Hello World gaes");
+const helloWorld = () => {
+     alert("Hello World gaes test");
 };
 
 const main = () => {
-    // helloWorldToGulp();
+    helloWorld();
 };
 
 export default { main };

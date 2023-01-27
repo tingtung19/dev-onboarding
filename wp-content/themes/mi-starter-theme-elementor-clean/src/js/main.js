@@ -3,7 +3,8 @@ window.$ = window.jQuery = $;
 import handler from "./customs/ExampleHandler.js";
 import constant from "./constant.js";
 import SlickHandler from "./customs/SlickHandler.js";
-import test from "./customs/test.js";
+// import test from "./customs/test.js";
+import onboarding from "./customs/onboarding.js";
 
 (function ($) {
 	
@@ -12,7 +13,8 @@ import test from "./customs/test.js";
 	// // handler.ajaxRequest();
 	// SlickHandler.createSlick();
 	// handler.changeText();
-	test.main(); 
+	// test.main(); 
+	onboarding.main();
 	// handler.main();
 	
 })(jQuery);

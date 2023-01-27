@@ -4,6 +4,7 @@
 	"description": "A theme based on Hello Elementor; a plain-vanilla & lightweight theme for Elementor page builder",
 	"main": "index.php",
 	"scripts": {
+		"dev" : "gulp watch",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "The Made Indonesian",

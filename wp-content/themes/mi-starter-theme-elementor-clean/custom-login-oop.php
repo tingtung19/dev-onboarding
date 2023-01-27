@@ -7,6 +7,8 @@
  global $user_ID;
  global $wpdb;
 
+ get_header();
+
  if (!$user_ID) {
     // # User in logged out
 
@@ -50,12 +52,22 @@
                         <p>
                             <!-- <label for="password">Password</label> -->
                             <input type="text"  class="form-control" id="password" name="password" placeholder="Enter Password">
+                            <!-- <p id="letter" class="invalid">Memiliki <b>huruf kecil</b></p>
+                            <p id="capital" class="invalid">Memiliki <b>huruf besar</b></p>
+                            <p id="number" class="invalid">Memiliki <b>nomor</b></p>
+                            <p id="length" class="invalid">Minimal <b>8 karakter</b></p> -->
                         </p>
+
+                        
                         <p>
                             <label for="username"></label>
                             <button type="submit" class="btn btn-lg btn-primary btn-block" id="btn_submit" name="btn_submit">Log in</button>
                         </p>
                     </form>
+                        <p>
+                            <label for="btn_submit_local" id="count"></label>
+                            <button class="btn btn-lg btn-info btn-block" id="btn_submit_local" name="btn_submit_local">Save Local Storage</button>
+                        </p>
                     
                 </div>
             </div>
@@ -88,5 +100,7 @@
     echo "Anda Sudah Login, silakan logout disini ";
     echo "<a href='".site_url()."/wp-login.php?action=logout&_wpnonce=620a23b10d'><button class='buttton'>Sign Out</button></a>";
  }
+ 
+ get_footer();
 ?>
 

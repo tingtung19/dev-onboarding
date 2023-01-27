@@ -22,6 +22,8 @@ class CustomFunctionOnboarding
 		// add_filter("upload_mimes", [$this, "addFileTypesToUploads"]); // ini harus dipindah
 		add_action( 'login_enqueue_scripts', [$this, 'my_login_logo' ]);
 		add_filter( 'login_headerurl', [$this, 'my_login_logo_url'] );
+		add_action('in_admin_footer',  [$this,'add_this_script_footer']);
+		add_action( 'wp_ajax_example_ajax_request', [$this,'example_ajax_request'] );
 	}
     public function my_login_logo() { 
 		// echo "Lokasi ".THEME_URL;
@@ -73,9 +75,49 @@ class CustomFunctionOnboarding
 		}
 	}
 
-	
-	
+	// This would normally be enqueued as a file, but for the sake of ease we will just print to the footer
+	public function add_this_script_footer(){ ?>
 
+		<script>
+		jQuery(document).ready(function($) {
+		
+			var fruit = 'Banana';
+		
+			$.ajax({
+				url: ajaxurl, 
+				data: {
+					'action':'example_ajax_request', // This is our PHP function below
+					'fruit' : fruit // This is the variable we are sending via AJAX
+				},
+				success:function(data) {
+					window.alert("sukses" + data);
+				},
+				error: function(errorThrown){
+					window.alert(errorThrown);
+				}
+			});
+		
+		});
+		</script>
+
+	<?php }
+
+	public function example_ajax_request() {
+
+		if ( isset($_REQUEST) ) {
+
+			$fruit = $_REQUEST['fruit'];
+
+			if ( $fruit == 'Banana' ) {
+				$fruit = 'Apple';
+			}
+
+			echo $fruit;
+		}
+
+	die();
+	}
+	
 	
 	
 }
