@@ -22,8 +22,15 @@ class CustomFunctionOnboarding
 		// add_filter("upload_mimes", [$this, "addFileTypesToUploads"]); // ini harus dipindah
 		add_action( 'login_enqueue_scripts', [$this, 'my_login_logo' ]);
 		add_filter( 'login_headerurl', [$this, 'my_login_logo_url'] );
-		add_action('in_admin_footer',  [$this,'add_this_script_footer']);
-		add_action( 'wp_ajax_example_ajax_request', [$this,'example_ajax_request'] );
+		// Fungsi ajax pada admin
+		add_action('wp_ajax_wp_test_admin_ajax', [$this, 'wp_test_admin_ajax_response']);
+		// Buat contoh halaman admin
+		add_action('admin_menu', [$this, 'wp_testing_admin_ajax_page']);
+		// Fungsi script javascript pada admin footer menggunakan hook suffix
+		add_action('admin_footer-toplevel_page_admin-ajax', [$this, 'wp_testing_admin_ajax_script']);
+
+		add_action('admin_footer-toplevel_page_users-menu', [$this, 'wp_search_users_ajax_script']);
+		
 	}
     public function my_login_logo() { 
 		// echo "Lokasi ".THEME_URL;
@@ -75,47 +82,78 @@ class CustomFunctionOnboarding
 		}
 	}
 
-	// This would normally be enqueued as a file, but for the sake of ease we will just print to the footer
-	public function add_this_script_footer(){ ?>
+	
+	/*
+	Plugin Name: WP Testing Admin AJAX
+	Plugin URI: https://www.dhimaskirana.com/
+	Description: Testing AJAX pada wp-admin dashboard
+	Author: Dhimas Kirana
+	Version: 1.0
+	Author URI: https://www.dhimaskirana.com/
+	*/
 
+	
+	public function wp_testing_admin_ajax_page() {
+		add_menu_page('Admin AJAX', 'Admin AJAX', 'manage_options', 'admin-ajax', 'wp_testing_admin_ajax_content', 'dashicons-chart-pie', 2);
+	}
+
+	
+
+	
+	public function wp_testing_admin_ajax_script() { ?>
 		<script>
-		jQuery(document).ready(function($) {
-		
-			var fruit = 'Banana';
-		
-			$.ajax({
-				url: ajaxurl, 
-				data: {
-					'action':'example_ajax_request', // This is our PHP function below
-					'fruit' : fruit // This is the variable we are sending via AJAX
-				},
-				success:function(data) {
-					window.alert("sukses" + data);
-				},
-				error: function(errorThrown){
-					window.alert(errorThrown);
-				}
+			jQuery(document).on('click', '#info-email', function() {
+				jQuery.ajax({
+					url: ajaxurl, // secara otomatis menuju admin-ajax.php
+					type: 'GET', // Ubah mau ajax GET/POST
+					data: {
+						'action': 'wp_test_admin_ajax'
+					},
+					beforeSend: function() {
+						jQuery('.spinner').addClass('is-active');
+					},
+					complete: function() {
+						jQuery('.spinner').removeClass('is-active');
+					},
+					success: function(response) {
+						alert(response);
+						console.log(response);
+					}
+				});
 			});
-		
-		});
 		</script>
-
 	<?php }
 
-	public function example_ajax_request() {
 
-		if ( isset($_REQUEST) ) {
-
-			$fruit = $_REQUEST['fruit'];
-
-			if ( $fruit == 'Banana' ) {
-				$fruit = 'Apple';
-			}
-
-			echo $fruit;
-		}
-
-	die();
+	public function wp_search_users_ajax_script() { ?>
+		<script>
+			jQuery(document).on('click', '#btnSearch', function() {				
+				let name = $("search_name").value;
+				jQuery.ajax({
+					url: ajaxurl, // secara otomatis menuju admin-ajax.php
+					type: 'GET', // Ubah mau ajax GET/POST
+					data: {
+						'name': name
+					},
+					beforeSend: function() {
+						jQuery('.spinner').addClass('is-active');
+					},
+					complete: function() {
+						jQuery('.spinner').removeClass('is-active');
+					},
+					success: function(response) {
+						alert(name);
+						console.log(response);
+					}
+				});
+			});
+		</script>
+	<?php }
+	
+	public function   () {
+		echo get_bloginfo('admin_email');
+		echo "halo ini ajax dari get";
+		wp_die();
 	}
 	
 	
