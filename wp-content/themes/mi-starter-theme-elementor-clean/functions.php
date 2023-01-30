@@ -261,6 +261,7 @@ define('IS_LOCAL', true);
 
 
 function users_page() {
+	global $hook_suffix;
 	$current_user = wp_get_current_user();
 	if (isset($_GET['act'])) {
 		$id = isset($_GET['id']) ? $_GET['id'] : '' ;
@@ -288,7 +289,7 @@ function users_page() {
 							<th>Action</th>
 						</tr>
 					</head>
-					<body>
+					<body id="data_user">
 						<?php
 							$no=1;
 							$show_users = showUsers();

@@ -22,14 +22,22 @@ class CustomFunctionOnboarding
 		// add_filter("upload_mimes", [$this, "addFileTypesToUploads"]); // ini harus dipindah
 		add_action( 'login_enqueue_scripts', [$this, 'my_login_logo' ]);
 		add_filter( 'login_headerurl', [$this, 'my_login_logo_url'] );
+
 		// Fungsi ajax pada admin
-		add_action('wp_ajax_wp_test_admin_ajax', [$this, 'wp_test_admin_ajax_response']);
+		// add_action('wp_ajax_wp_test_admin_ajax', [$this, 'wp_test_admin_ajax_response']);
 		// Buat contoh halaman admin
-		add_action('admin_menu', [$this, 'wp_testing_admin_ajax_page']);
+		// add_action('admin_menu', [$this, 'wp_testing_admin_ajax_page']);
 		// Fungsi script javascript pada admin footer menggunakan hook suffix
-		add_action('admin_footer-toplevel_page_admin-ajax', [$this, 'wp_testing_admin_ajax_script']);
+		// add_action('admin_footer-toplevel_page_admin-ajax', [$this, 'wp_testing_admin_ajax_script']);
 
 		add_action('admin_footer-toplevel_page_users-menu', [$this, 'wp_search_users_ajax_script']);
+		add_action('wp_ajax_wp_getdata_user', [$this, 'wp_get_data_user_where']);
+		add_action('wp_ajax_nopriv_wp_getdata_user', [$this, 'wp_get_data_user_where']);
+
+
+		//ajax show post
+		add_action('wp_ajax_wp_getdata_user', [$this, 'data_post']);
+		add_action('wp_ajax_nopriv_wp_getdata_user', [$this, 'data_post']);
 		
 	}
     public function my_login_logo() { 
@@ -128,11 +136,12 @@ class CustomFunctionOnboarding
 	public function wp_search_users_ajax_script() { ?>
 		<script>
 			jQuery(document).on('click', '#btnSearch', function() {				
-				let name = $("search_name").value;
+				var name = jQuery('#search_name').val();
 				jQuery.ajax({
 					url: ajaxurl, // secara otomatis menuju admin-ajax.php
 					type: 'GET', // Ubah mau ajax GET/POST
 					data: {
+						'action' : 'wp_getdata_user',
 						'name': name
 					},
 					beforeSend: function() {
@@ -142,18 +151,58 @@ class CustomFunctionOnboarding
 						jQuery('.spinner').removeClass('is-active');
 					},
 					success: function(response) {
-						alert(name);
-						console.log(response);
+						// alert(response);
+						// console.log(response);
+
+						$('#data_user').append(response);
 					}
 				});
 			});
 		</script>
 	<?php }
 	
-	public function   () {
+	public function wp_test_admin_ajax_response  () {
 		echo get_bloginfo('admin_email');
 		echo "halo ini ajax dari get";
 		wp_die();
+	}
+
+
+	function wp_get_data_user_where (){
+		global $wpdb;
+		$name = $_GET['name'];
+		$sql="select * from wp_users where user_login='wawan' order by user_registered asc";
+		$query = $wpdb->get_results($sql);
+		// echo "halo";
+		foreach($query as $data){
+			?>
+			<tr>
+				<td><?=$no;?></td>
+				<td><?=$data->user_login;?></td>
+				<td><?=$data->user_email;?></td>
+				<td>xxxxxxx</td>
+				<td>
+					<a class="button" href="<?= admin_url().'admin.php?page=users-add&act=edit&id='.$data->ID?>">Edit</a> 
+					<a class="button" href="<?= admin_url().'admin.php?page=users-menu&act=delete&id='.$data->ID?>">Delete</a></td>
+			</tr>
+			<?php
+				$no++;
+		}
+
+	}
+
+	function data_post(){
+		$the_query = new WP_Query(array('post_per_page'=>10));
+		if ($the_query->have_posts()) {
+			while ($the_query->have_posts()) : $the_query->the_post(); ?>
+				<h2><?php the_title(); ?></h2>
+				<p><?php the_content(); ?></p>
+			<?php endwhile;
+			wp_reset_postdata();
+
+		}
+		die();
+
 	}
 	
 	
