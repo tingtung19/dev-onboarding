@@ -1,0 +1,17 @@
+2023-01-30T09:42:37+00:00 CRITICAL Uncaught Error: Call to a member function get_id() on null in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\woocommerce\single-product\title.php:24
+Stack trace:
+#0 C:\laragon\www\dev-onboarding\wp-content\plugins\woocommerce\includes\wc-core-functions.php(345): include()
+#1 C:\laragon\www\dev-onboarding\wp-content\plugins\woocommerce\includes\wc-template-functions.php(1621): wc_get_template('single-product/...')
+#2 C:\laragon\www\dev-onboarding\wp-includes\class-wp-hook.php(308): woocommerce_template_single_title('')
+#3 C:\laragon\www\dev-onboarding\wp-includes\class-wp-hook.php(332): WP_Hook->apply_filters('', Array)
+#4 C:\laragon\www\dev-onboarding\wp-includes\plugin.php(517): WP_Hook->do_action(Array)
+#5 C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\woocommerce\content-single-product.php(60): do_action('woocommerce_sin...')
+#6 C:\laragon\www\dev-onboarding\wp-includes\template.php(785): require('C:\\laragon\\www\\...')
+#7 C:\laragon\www\dev-onboarding\wp-content\plugins\woocommerce\includes\wc-core-functions.php(284): load_template('C:\\laragon\\www\\...', false)
+#8 C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\woocommerce\single-product.php(37): wc_get_template_part('content', 'single-product')
+#9 C:\laragon\www\dev-onboarding\wp-includes\template-loader.php(106): include('C:\\laragon\\www\\...')
+#10 C:\laragon\www\dev-onboarding\wp-blog-header.php(19): require_once('C:\\laragon\\www\\...')
+#11 C:\laragon\www\dev-onboarding\index.php(17): require('C:\\laragon\\www\\...')
+#12 {main}
+  thrown in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\woocommerce\single-product\title.php on line 24
+

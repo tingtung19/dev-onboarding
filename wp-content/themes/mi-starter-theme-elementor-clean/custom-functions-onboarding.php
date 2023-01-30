@@ -36,6 +36,10 @@ class CustomFunctionOnboarding
 		add_action('admin_footer-toplevel_page_users-menu', [$this, 'wp_search_users_ajax_script']);
 		add_action('wp_ajax_getdatauser', [$this, 'wp_get_data_user_where']);
 		add_action('wp_ajax_nopriv_getdatauser', [$this, 'wp_get_data_user_where']);
+
+
+		// button favorite in simple product 
+		add_action('woocommerce_before_add_to_cart_form', [$this, 'wc_add_fav']);
 	}
     public function my_login_logo() { 
 		// echo "Lokasi ".THEME_URL;
@@ -101,31 +105,24 @@ class CustomFunctionOnboarding
 	public function wp_testing_admin_ajax_page() {
 		add_menu_page('Admin AJAX', 'Admin AJAX', 'manage_options', 'admin-ajax', 'wp_testing_admin_ajax_content', 'dashicons-chart-pie', 2);
 	}
-
 	
 
 	
-	public function wp_testing_admin_ajax_script() { ?>
+
+	
+	public function wc_add_fav() { ?>
 		<script>
-			jQuery(document).on('click', '#info-email', function() {
-				jQuery.ajax({
-					url: ajaxurl, // secara otomatis menuju admin-ajax.php
-					type: 'GET', // Ubah mau ajax GET/POST
-					data: {
-						'action': 'wp_test_admin_ajax'
-					},
-					beforeSend: function() {
-						jQuery('.spinner').addClass('is-active');
-					},
-					complete: function() {
-						jQuery('.spinner').removeClass('is-active');
-					},
-					success: function(response) {
-						alert(response);
-						console.log(response);
-					}
-				});
+		jQuery(document).ready(function(){
+			jQuery("#btnAddFav" ).click(function() {	
+				var prod_id = jQuery("#product_id").val();
+				var prod_name = jQuery("#product_name").val();
+				
+				sessionStorage.setItem('product_id', prod_id);
+        		sessionStorage.setItem('product_name', prod_name);
+				alert('Save Favorite Product Success');
 			});
+		});
+
 		</script>
 	<?php }
 

@@ -20,3 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 the_title( '<h1 class="product_title entry-title">', '</h1>' );
+?>
+
+<button class="button alt" id="btnAddFav"><span class="dashicons-admin-users"></span> Save Favorite</button>
+
+
