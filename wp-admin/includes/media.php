@@ -528,7 +528,7 @@ function media_handle_sideload( $file_array, $post_id = 0, $desc = null, $post_d
 function wp_iframe( $content_func, ...$args ) {
 	_wp_admin_html_begin();
 	?>
-	<title><?php bloginfo( 'name' ); ?> &rsaquo; <?php _e( 'Uploads' ); ?> &#8212; <?php _e( 'WordPress' ); ?></title>
+	<title><?php get_bloginfo( 'name' ); ?> &rsaquo; <?php _e( 'Uploads' ); ?> &#8212; <?php _e( 'WordPress' ); ?></title>
 	<?php
 
 	wp_enqueue_style( 'colors' );

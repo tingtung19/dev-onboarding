@@ -132,8 +132,9 @@ class CustomFunctionOnboarding
 
 	public function wp_search_users_ajax_script() { ?>
 		<script>
-			jQuery(document).on('click', '#btnSearch', function() {				
+			jQuery("#btnSearch" ).click(function() {			
 				var name = jQuery("#search_name").val();
+				console.log(name);
 				jQuery.ajax({
 					url: ajaxurl, // secara otomatis menuju admin-ajax.php
 					type: 'POST', // Ubah mau ajax GET/POST
