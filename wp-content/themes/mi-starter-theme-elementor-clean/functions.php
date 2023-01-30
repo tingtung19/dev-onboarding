@@ -274,12 +274,16 @@ function users_page() {
 				<?php esc_html_e( 'Welcome '.$current_user->user_login.' to Users Add Page (Custom).', 'my-plugin-textdomain' ); ?>
 				<a class="button" href="<?=admin_url().'admin.php?page=users-add' ?>">New User</a>
 			</h1>
-			<label>Search</label><input type="text" id="search_name" class="search_name"><button id="btnSearch">Seacrh</button>			
-			<span class="spinner" style="float:none;"></span>
+			<label>Search : </label><input type="text" id="search_name" class="search_name">
+			<button class="button" id="btnSearch">Seacrh</button>
+			<button class="button" id="btnShowAll">Show All Data</button>			
+			<span class="spinner" style="float:none;"></span> 
+			<p></p>
 			
 			<div class="row">
-				<table style="width:100%; border: 1px;">
-					<head>
+				<div id="showCoba"></div>
+				<table style="width:100%; border: 1px;" class="wp-list-table widefat fixed striped table-view-list pages ">
+					<thead>
 						<tr>
 							<th>ID</th>
 							<th>User Name</th>
@@ -287,32 +291,9 @@ function users_page() {
 							<th>Password</th>
 							<th>Action</th>
 						</tr>
-					</head>
-					<body>
-						<?php
-							$no=1;
-							$show_users = showUsers();
-
-							foreach($show_users as $data){
-
-						?>
-						<tr>
-							<td><?=$no;?></td>
-							<td><?=$data->user_login;?></td>
-							<td><?=$data->user_email;?></td>
-							<td>xxxxxxx</td>
-							<td>
-								<a class="button" href="<?= admin_url().'admin.php?page=users-add&act=edit&id='.$data->ID?>">Edit</a> 
-								<a class="button" href="<?= admin_url().'admin.php?page=users-menu&act=delete&id='.$data->ID?>">Delete</a></td>
-						</tr>
-						<?php
-							$no++;
-							}
-						?>
-					</body>
-					
-					
-
+					</thead>
+					<tbody id="showdatauser">	
+					</tbody>
 				</table>
 			</div>
 		

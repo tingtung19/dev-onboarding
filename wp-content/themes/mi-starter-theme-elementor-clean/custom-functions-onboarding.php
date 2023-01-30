@@ -22,6 +22,8 @@ class CustomFunctionOnboarding
 		// add_filter("upload_mimes", [$this, "addFileTypesToUploads"]); // ini harus dipindah
 		add_action( 'login_enqueue_scripts', [$this, 'my_login_logo' ]);
 		add_filter( 'login_headerurl', [$this, 'my_login_logo_url'] );
+
+
 		// Fungsi ajax pada admin
 		add_action('wp_ajax_wp_test_admin_ajax', [$this, 'wp_test_admin_ajax_response']);
 		// Buat contoh halaman admin
@@ -29,8 +31,11 @@ class CustomFunctionOnboarding
 		// Fungsi script javascript pada admin footer menggunakan hook suffix
 		add_action('admin_footer-toplevel_page_admin-ajax', [$this, 'wp_testing_admin_ajax_script']);
 
-		add_action('admin_footer-toplevel_page_users-menu', [$this, 'wp_search_users_ajax_script']);
 		
+		//ajax show post
+		add_action('admin_footer-toplevel_page_users-menu', [$this, 'wp_search_users_ajax_script']);
+		add_action('wp_ajax_getdatauser', [$this, 'wp_get_data_user_where']);
+		add_action('wp_ajax_nopriv_getdatauser', [$this, 'wp_get_data_user_where']);
 	}
     public function my_login_logo() { 
 		// echo "Lokasi ".THEME_URL;
@@ -128,12 +133,13 @@ class CustomFunctionOnboarding
 	public function wp_search_users_ajax_script() { ?>
 		<script>
 			jQuery(document).on('click', '#btnSearch', function() {				
-				let name = $("search_name").value;
+				var name = jQuery("#search_name").val();
 				jQuery.ajax({
 					url: ajaxurl, // secara otomatis menuju admin-ajax.php
-					type: 'GET', // Ubah mau ajax GET/POST
+					type: 'POST', // Ubah mau ajax GET/POST
 					data: {
-						'name': name
+						'name': name,
+						'action' : 'getdatauser'
 					},
 					beforeSend: function() {
 						jQuery('.spinner').addClass('is-active');
@@ -142,7 +148,45 @@ class CustomFunctionOnboarding
 						jQuery('.spinner').removeClass('is-active');
 					},
 					success: function(response) {
-						alert(name);
+						// alert(name);
+						if (response != 10) {
+							jQuery('#showdatauser').html(response);
+							jQuery('#showCoba').html('Key search : '+name);
+						}else{
+							jQuery('#showdatauser').html('Empty data');
+							jQuery('#showCoba').html('Key search : '+name);
+						}
+						
+						console.log(response);
+					}
+				});
+			});
+		
+			jQuery(document).on('click', '#btnShowAll', function() {				
+				var dataall = 'all';
+				jQuery.ajax({
+					url: ajaxurl, // secara otomatis menuju admin-ajax.php
+					type: 'GET', // Ubah mau ajax GET/POST
+					data: {
+						'data': dataall,
+						'action' : 'getdatauser'
+					},
+					beforeSend: function() {
+						jQuery('.spinner').addClass('is-active');
+					},
+					complete: function() {
+						jQuery('.spinner').removeClass('is-active');
+					},
+					success: function(response) {
+						// alert(name);
+						if (response != 10) {
+							jQuery('#showdatauser').html(response);
+							jQuery('#showCoba').html('Key search : '+dataall);
+						}else{
+							jQuery('#showdatauser').html('Empty data all');
+							jQuery('#showCoba').html('Key search : '+name);
+						}
+						
 						console.log(response);
 					}
 				});
@@ -150,10 +194,43 @@ class CustomFunctionOnboarding
 		</script>
 	<?php }
 	
-	public function   () {
+	public function wp_test_admin_ajax_response() {
 		echo get_bloginfo('admin_email');
 		echo "halo ini ajax dari get";
 		wp_die();
+	}
+
+	
+	public function wp_get_data_user_where (){
+		global $wpdb;
+		
+		$data = $_GET['data'];
+		if ($data == 'all') {
+			$sql="select * from wp_users  order by user_registered asc";
+		}else{
+			$name = $_POST['name'];
+			$sql="select * from wp_users where user_login='$name' order by user_registered asc";
+		}
+		
+		$query = $wpdb->get_results($sql);
+		$no=1;
+		foreach($query as $data){
+
+			?>
+			<tr>
+				<td><?=$no;?></td>
+				<td><?=$data->user_login;?></td>
+				<td><?=$data->user_email;?></td>
+				<td>xxxxxxx</td>
+				<td>
+					<a class="button" href="<?= admin_url().'admin.php?page=users-add&act=edit&id='.$data->ID?>">Edit</a> 
+					<a class="button" href="<?= admin_url().'admin.php?page=users-menu&act=delete&id='.$data->ID?>">Delete</a></td>
+			</tr>
+			<?php
+				$no++;
+		}
+		
+
 	}
 	
 	
