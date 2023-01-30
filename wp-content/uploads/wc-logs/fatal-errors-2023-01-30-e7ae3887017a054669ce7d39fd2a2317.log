@@ -15,3 +15,11 @@ Stack trace:
 #12 {main}
   thrown in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\woocommerce\single-product\title.php on line 24
 
+2023-01-30T10:26:48+00:00 CRITICAL syntax error, unexpected identifier "add_action", expecting "function" or "const" in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\custom-functions-onboarding.php on line 119
+
+2023-01-30T10:28:16+00:00 CRITICAL syntax error, unexpected identifier "add_action", expecting "function" or "const" in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\custom-functions-onboarding.php on line 119
+
+2023-01-30T10:28:17+00:00 CRITICAL syntax error, unexpected identifier "add_action", expecting "function" or "const" in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\custom-functions-onboarding.php on line 119
+
+2023-01-30T10:28:18+00:00 CRITICAL syntax error, unexpected identifier "add_action", expecting "function" or "const" in C:\laragon\www\dev-onboarding\wp-content\themes\mi-starter-theme-elementor-clean\custom-functions-onboarding.php on line 119
+

@@ -40,6 +40,11 @@ class CustomFunctionOnboarding
 
 		// button favorite in simple product 
 		add_action('woocommerce_before_add_to_cart_form', [$this, 'wc_add_fav']);
+
+		//add columns in list produk
+		add_filter( 'manage_edit-product_columns', [$this,'admin_products_publish_column'], 9999 );
+		add_action( 'manage_product_posts_custom_column', [$this,'admin_products_publish_column_content'], 10, 2 );
+ 
 	}
     public function my_login_logo() { 
 		// echo "Lokasi ".THEME_URL;
@@ -105,7 +110,23 @@ class CustomFunctionOnboarding
 	public function wp_testing_admin_ajax_page() {
 		add_menu_page('Admin AJAX', 'Admin AJAX', 'manage_options', 'admin-ajax', 'wp_testing_admin_ajax_content', 'dashicons-chart-pie', 2);
 	}
+
 	
+ 
+	function admin_products_publish_column( $columns ){
+		$columns['publish_date'] = 'Publish Date';
+		return $columns;
+	}
+
+	
+	function admin_products_publish_column_content( $column, $product_id ){
+		if ( $column == 'publish_date' ) {
+			$start_date = get_post_meta(get_the_ID(), "start_date", true);
+			$end_date = get_post_meta(get_the_ID(), "end_date", true);
+			echo $start_date." -> ".$end_date;
+		}
+	}
+		
 
 	
 

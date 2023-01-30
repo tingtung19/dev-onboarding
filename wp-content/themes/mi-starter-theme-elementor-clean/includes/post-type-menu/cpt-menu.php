@@ -31,7 +31,7 @@ class ContohMenu extends RegisterMenu{
 	}
 
 	public function create_meta_box(){
-        add_meta_box('wpc_editor','Post Editor', [$this, 'meta_box_html']);
+        // add_meta_box('wpc_editor','Post Editor', [$this, 'meta_box_html']);
 
     }
 
